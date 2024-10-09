@@ -1,0 +1,19 @@
+<?php
+/** @var \SajidPatel\PriceDropNotification\Block\Product\View\PriceDropButton $block */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+<?php if ($block->isEnabled() && $block->getProduct()->getData('enable_price_drop_notification')): ?>
+    <button id="price-drop-notify" class="action primary">
+        <?= $escaper->escapeHtml(__('Notify me when price drops')) ?>
+    </button>
+    <script type="text/x-magento-init">
+    {
+        "#price-drop-notify": {
+            "SajidPatel_PriceDropNotification/js/price-drop-notify": {
+                "subscribeUrl": "<?= $escaper->escapeUrl($block->getSubscribeUrl()) ?>",
+                "productId": "<?= $escaper->escapeHtml($block->getProduct()->getId()) ?>"
+            }
+        }
+    }
+    </script>
+<?php endif; ?>
