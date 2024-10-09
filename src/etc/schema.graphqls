@@ -1,0 +1,52 @@
+type Mutation {
+    subscribeToPriceDropNotification(
+        product_id: Int!
+    ): PriceDropNotificationSubscriptionOutput @resolver(class: "MumzWorld\\PriceDropNotification\\Model\\Resolver\\SubscribeToPriceDropNotification")
+
+    unsubscribeFromPriceDropNotification(
+        notification_id: Int!
+    ): PriceDropNotificationUnsubscribeOutput @resolver(class: "MumzWorld\\PriceDropNotification\\Model\\Resolver\\UnsubscribeFromPriceDropNotification")
+}
+
+type Query {
+    customerPriceDropNotifications: [PriceDropNotification] @resolver(class: "MumzWorld\\PriceDropNotification\\Model\\Resolver\\CustomerPriceDropNotifications")
+}
+
+type PriceDropNotification {
+    id: Int!
+    product: ProductInterface!
+    created_at: String!
+}
+
+type PriceDropNotificationSubscriptionOutput {
+    success: Boolean!
+    message: String!
+}
+
+type PriceDropNotificationUnsubscribeOutput {
+    success: Boolean!
+    message: String!
+}
+
+interface ProductInterface {
+    id: Int!
+    name: String!
+    sku: String!
+    price_range: PriceRange!
+    price_drop_notification_enabled: Boolean!
+}
+
+type PriceRange {
+    minimum_price: Price!
+    maximum_price: Price!
+}
+
+type Price {
+    regular_price: Money!
+    final_price: Money!
+}
+
+type Money {
+    value: Float!
+    currency: String!
+}

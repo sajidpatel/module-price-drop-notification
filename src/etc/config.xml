@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <price_drop_notification>
+            <general>
+                <enabled>0</enabled>
+            </general>
+            <cron_schedule>
+                <queue_process_frequency></queue_process_frequency>
+                <cleanup_frequency>daily</cleanup_frequency>
+                <cleanup_days></cleanup_days>
+            </cron_schedule>
+            <email>
+                <sender>general</sender>
+                <template>price_drop_notification_email_template</template>
+            </email>
+        </price_drop_notification>
+    </default>
+</config>

@@ -1,0 +1,24 @@
+<!--@subject {{trans "Price Drop Alert for %product_name" product_name=$product_name}} @-->
+<!--@vars {
+"var product_name":"Product Name",
+"var product_url":"Product URL",
+"var old_price":"Old Price",
+"var new_price":"New Price",
+"var store.getFrontendName()":"Store Name"
+} @-->
+
+{{template config_path="design/email/header_template"}}
+
+<p>{{trans "Hello,"}}</p>
+
+<p>{{trans "Good news! The price of a product you're interested in has dropped."}}</p>
+
+<p>{{trans "Product: %product_name" product_name=$product_name}}</p>
+<p>{{trans "Old Price: %old_price" old_price=$old_price}}</p>
+<p>{{trans "New Price: %new_price" new_price=$new_price}}</p>
+
+<p>{{trans 'To view the product, click <a href="%product_url">here</a>.' product_url=$product_url |raw}}</p>
+
+<p>{{trans "Thank you for shopping with %store_name." store_name=$store.getFrontendName()}}</p>
+
+{{template config_path="design/email/footer_template"}}

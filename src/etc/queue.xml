@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue.xsd">
+    <broker
+        topic="mumzworld.price_drop_notification"
+        exchange="magento" type="amqp">
+        <queue
+            name="price_drop_notification_queue"
+            consumer="PriceDropNotificationConsumer"
+            consumerInstance="Magento\Framework\MessageQueue\Consumer"
+            handler="MumzWorld\PriceDropNotification\Model\Queue\PriceDropNotificationHandler::process" />
+    </broker>
+</config>
