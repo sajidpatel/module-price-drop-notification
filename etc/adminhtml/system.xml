@@ -13,6 +13,7 @@
                 </field>
             </group>
             <group id="cron_schedule" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Cron Schedule</label>
                 <field id="queue_process_frequency" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Queue Processing Frequency (in minutes)</label>
                     <comment>How often should the system process the notification queue</comment>

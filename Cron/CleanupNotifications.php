@@ -8,39 +8,44 @@ use SajidPatel\PriceDropNotification\Model\ResourceModel\Notification as Notific
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Psr\Log\LoggerInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class CleanupNotifications
 {
+    const XML_PATH_CLEANUP_DAYS = 'price_drop_notification/cron_schedule/cleanup_days';
+    const XML_PATH_ENABLED = 'price_drop_notification/general/enabled';
+
     /**
      * @var CollectionFactory
      */
-    private $notificationCollectionFactory;
+    protected $notificationCollectionFactory;
 
     /**
      * @var NotificationResource
      */
-    private $notificationResource;
+    protected $notificationResource;
 
     /**
      * @var DateTime
      */
-    private $dateTime;
+    protected $dateTime;
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    protected $logger;
 
     /**
      * @var ScopeConfigInterface
      */
-    private $scopeConfig;
+    protected $scopeConfig;
 
     /**
      * @param CollectionFactory $notificationCollectionFactory
      * @param NotificationResource $notificationResource
      * @param DateTime $dateTime
      * @param LoggerInterface $logger
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         CollectionFactory $notificationCollectionFactory,
@@ -64,15 +69,18 @@ class CleanupNotifications
     public function execute()
     {
         if (!$this->isEnabled()) {
+            $this->logger->info("Price drop notification feature is disabled. Skipping cleanup.");
             return;
         }
 
         try {
             $collection = $this->notificationCollectionFactory->create();
 
-            // Remove notifications older than 30 days
-            $thirtyDaysAgo = $this->dateTime->gmtDate('Y-m-d H:i:s', strtotime('-30 days'));
-            $collection->addFieldToFilter('created_at', ['lt' => $thirtyDaysAgo]);
+            $daysToKeep = $this->getDaysToKeep();
+            $cutoffDate = $this->dateTime->gmtDate(
+                'Y-m-d H:i:s', strtotime("-{$daysToKeep} days")
+            );
+            $collection->addFieldToFilter('created_at', ['lt' => $cutoffDate]);
 
             $count = 0;
             foreach ($collection as $notification) {
@@ -80,19 +88,35 @@ class CleanupNotifications
                 $count++;
             }
 
-            $this->logger->info("Cleaned up {$count} old price drop notifications.");
+            $this->logger->info(
+                "Cleaned up {$count} price drop notifications older than {$daysToKeep} days."
+            );
         } catch (\Exception $e) {
-            $this->logger->error('Error cleaning up price drop notifications: ' . $e->getMessage(), ['exception' => $e]);
+            $this->logger->error(
+                'Error cleaning up price drop notifications: ' . $e->getMessage(),
+                ['exception' => $e]
+            );
         }
     }
 
     /**
-     * Check if price_drop_notification feature is enable
+     * Check if price_drop_notification feature is enabled
      *
      * @return boolean
      */
-    private function isEnabled(): bool
+    protected function isEnabled(): bool
     {
-        return (bool)$this->scopeConfig->getValue('price_drop_notification/general/enabled');
+        return (bool)$this->scopeConfig->getValue(self::XML_PATH_ENABLED, ScopeInterface::SCOPE_STORE);
+    }
+
+    /**
+     * Get the number of days to keep notifications from configuration
+     *
+     * @return int
+     */
+    protected function getDaysToKeep(): int
+    {
+        $configValue = $this->scopeConfig->getValue(self::XML_PATH_CLEANUP_DAYS, ScopeInterface::SCOPE_STORE);
+        return (int)$configValue ?: 30; // Default to 30 days if not set
     }
 }

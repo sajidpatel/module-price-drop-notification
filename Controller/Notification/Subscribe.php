@@ -32,7 +32,7 @@ class Subscribe extends Action
     /**
      * @var ProductRepositoryInterface
      */
-    private ProductRepositoryInterface $productRepository;
+    protected ProductRepositoryInterface $productRepository;
 
     /**
      * Undocumented function

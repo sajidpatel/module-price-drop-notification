@@ -1,6 +1,6 @@
 {
     "name": "sajidpatel/module-price-drop-notification",
-    "description": "A Magento 2 module that allows customers to subscribe to price drop notifications for products",
+    "description": "A Magento 2 module that allows customers to subscribe price drop notifications for products",
     "type": "magento2-module",
     "version": "1.0.0",
     "license": [

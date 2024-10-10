@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace SajidPatel\PriceDropNotification\Cron;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\MessageQueue\ConsumerFactory;
 use Psr\Log\LoggerInterface;
 
@@ -11,17 +12,17 @@ class ProcessPriceDropNotificationQueue
     /**
      * @var ConsumerFactory
      */
-    private $consumerFactory;
+    protected $consumerFactory;
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    protected $logger;
 
     /**
      * @var ScopeConfigInterface
      */
-    private $scopeConfig;
+    protected $scopeConfig;
 
     /**
      * ProcessPriceDropNotificationQueue Constructor function

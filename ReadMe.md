@@ -1,8 +1,8 @@
-# MumzWorld Price Drop Notification Module for Magento 2
+# SajidPatel Price Drop Notification Module for Magento 2
 
 ## Overview
 
-The MumzWorld Price Drop Notification module for Magento 2 allows customers to subscribe to price drop alerts for specific products. When the price of a subscribed product decreases, the system automatically sends an email notification to the customer.
+The SajidPatel Price Drop Notification module for Magento 2 allows customers to subscribe to price drop alerts for specific products. When the price of a subscribed product decreases, the system automatically sends an email notification to the customer.
 
 ## Features
 
@@ -15,9 +15,9 @@ The MumzWorld Price Drop Notification module for Magento 2 allows customers to s
 
 ## Installation
 
-1. Create a directory for the module: `app/code/MumzWorld/PriceDropNotification`
+1. Create a directory for the module: `app/code/SajidPatel/PriceDropNotification`
 2. Copy the module files into this directory
-3. Enable the module by running: `bin/magento module:enable MumzWorld_PriceDropNotification`
+3. Enable the module by running: `bin/magento module:enable SajidPatel_PriceDropNotification`
 4. Run the Magento setup upgrade: `bin/magento setup:upgrade`
 5. Flush the cache: `bin/magento cache:flush`
 
@@ -54,7 +54,7 @@ The module provides GraphQL mutations and queries for headless frontend integrat
 
 ## Support
 
-For issues, feature requests, or questions, please open an issue on the GitHub repository or contact MumzWorld support.
+For issues, feature requests, or questions, please open an issue on the GitHub repository or contact SajidPatel support.
 
 ## License
 

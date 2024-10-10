@@ -11,9 +11,9 @@ use SajidPatel\PriceDropNotification\Model\PriceDropNotificationMessage;
 
 class PriceChange implements ObserverInterface
 {
-    private $notificationCollectionFactory;
-    private $scopeConfig;
-    private $publisher;
+    protected $notificationCollectionFactory;
+    protected $scopeConfig;
+    protected $publisher;
 
     public function __construct(
         CollectionFactory $notificationCollectionFactory,

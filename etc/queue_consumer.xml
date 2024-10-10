@@ -4,8 +4,8 @@
     xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
     <consumer
         name="PriceDropNotificationConsumer"
-        queue="price_drop_notification_queue"
-        connection="amqp"
+        queue="sajidpatel_price_drop_notification_queue"
+        connection="db"
         maxMessages="100"
         consumerInstance="Magento\Framework\MessageQueue\Consumer"
         handler="SajidPatel\PriceDropNotification\Model\Queue\PriceDropNotificationHandler::process" />

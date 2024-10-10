@@ -50,3 +50,18 @@ type Money {
     value: Float!
     currency: String!
 }
+
+type Mutation {
+    toggleCustomerPriceDropNotificationOptOut(
+        opt_out: Boolean!
+    ): CustomerPriceDropNotificationOptOut @resolver(class: "SajidPatel\\PriceDropNotification\\Model\\Resolver\\TogglePriceDropNotificationOptOut")
+}
+
+type CustomerPriceDropNotificationOptOut {
+    customer_id: Int!
+    opted_out: Boolean!
+}
+
+type Customer {
+    price_drop_notification_opt_out: Boolean @resolver(class: "SajidPatel\\PriceDropNotification\\Model\\Resolver\\GetCustomerPriceDropNotificationOptOut")
+}

@@ -11,7 +11,7 @@ class PriceDropNotification extends AbstractModifier
     /**
      * @var ArrayManager
      */
-    private $arrayManager;
+    protected $arrayManager;
 
     /**
      * @param ArrayManager $arrayManager
@@ -28,20 +28,43 @@ class PriceDropNotification extends AbstractModifier
     public function modifyMeta(array $meta)
     {
         $meta = $this->arrayManager->set(
-            'product-details/children/container_enable_price_drop_notification/arguments/data/config',
+            'product-details/children/container_price_drop_notification',
             $meta,
             [
-                'component' => 'Magento_Ui/js/form/element/single-checkbox',
-                'formElement' => 'checkbox',
-                'componentType' => 'field',
-                'prefer' => 'toggle',
-                'dataScope' => 'enable_price_drop_notification',
-                'label' => __('Enable Price Drop Notification'),
-                'valueMap' => [
-                    'false' => '0',
-                    'true' => '1'
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'componentType' => 'container',
+                            'formElement' => 'container',
+                            'component' => 'Magento_Ui/js/form/components/group',
+                            'label' => __('Price Drop Notification'),
+                            'sortOrder' => 50,
+                        ],
+                    ],
                 ],
-                'default' => '1'
+                'children' => [
+                    'enable_price_drop_notification' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'dataType' => 'boolean',
+                                    'formElement' => 'checkbox',
+                                    'componentType' => 'field',
+                                    'component' => 'Magento_Ui/js/form/element/single-checkbox',
+                                    'prefer' => 'toggle',
+                                    'dataScope' => 'enable_price_drop_notification',
+                                    'label' => __('Enable Price Drop Notification'),
+                                    'valueMap' => [
+                                        'false' => '0',
+                                        'true' => '1'
+                                    ],
+                                    'default' => '1',
+                                    'sortOrder' => 10,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
             ]
         );
 

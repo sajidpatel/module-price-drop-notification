@@ -20,27 +20,27 @@ class PriceDropNotificationHandler
     /**
      * @var TransportBuilder
      */
-    private $transportBuilder;
+    protected $transportBuilder;
 
     /**
      * @var StoreManagerInterface
      */
-    private $storeManager;
+    protected $storeManager;
 
     /**
      * @var ScopeConfigInterface
      */
-    private $scopeConfig;
+    protected $scopeConfig;
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    protected $logger;
 
     /**
      * @var ProductRepositoryInterface
      */
-    private $productRepository;
+    protected $productRepository;
 
     /**
      * @param TransportBuilder $transportBuilder

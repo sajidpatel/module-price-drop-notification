@@ -9,7 +9,7 @@ use Magento\Framework\GraphQl\Query\Resolver\Argument\FieldEntityAttributesInter
 
 class PriceDropNotification implements FieldEntityAttributesInterface
 {
-    private $config;
+    protected $config;
 
     public function __construct(ConfigInterface $config)
     {

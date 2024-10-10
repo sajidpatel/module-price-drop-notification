@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
+    <topic
+        name="sajidpatel.price_drop_notification"
+        request="SajidPatel\PriceDropNotification\Api\Data\PriceDropNotificationMessageInterface">
+        <handler
+            name="priceDropNotificationHandler"
+            type="SajidPatel\PriceDropNotification\Model\Queue\PriceDropNotificationHandler"
+            method="process" />
+    </topic>
+</config>

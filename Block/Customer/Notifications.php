@@ -13,12 +13,12 @@ class Notifications extends Template
     /**
      * @var CollectionFactory
      */
-    private $notificationCollectionFactory;
+    protected $notificationCollectionFactory;
 
     /**
      * @var Session
      */
-    private $customerSession;
+    protected $customerSession;
 
     /**
      * @param Context $context

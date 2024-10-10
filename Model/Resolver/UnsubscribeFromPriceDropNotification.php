@@ -15,9 +15,9 @@ use Magento\Customer\Model\Session;
 
 class UnsubscribeFromPriceDropNotification implements ResolverInterface
 {
-    private $notificationFactory;
-    private $notificationResource;
-    private $customerSession;
+    protected $notificationFactory;
+    protected $notificationResource;
+    protected $customerSession;
 
     public function __construct(
         NotificationFactory $notificationFactory,

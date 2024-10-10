@@ -1,7 +1,7 @@
-# MumzWorld_PriceDropNotification Module Structure
+# SajidPatel_PriceDropNotification Module Structure
 
 ```
-MumzWorld_PriceDropNotification/
+SajidPatel_PriceDropNotification/
 ├── Api/
 │   └── Data/
 │       └── PriceDropNotificationMessageInterface.php
@@ -79,4 +79,4 @@ MumzWorld_PriceDropNotification/
 └── registration.php
 ```
 
-This structure reflects the current state of the MumzWorld_PriceDropNotification module, including GraphQL resolvers and other components we've added.
+This structure reflects the current state of the SajidPatel_PriceDropNotification module, including GraphQL resolvers and other components we've added.

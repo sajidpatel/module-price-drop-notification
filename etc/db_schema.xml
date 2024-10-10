@@ -23,4 +23,13 @@
             <column name="customer_id"/>
         </index>
     </table>
+
+    <table name="customer_entity">
+        <column
+            xsi:type="boolean"
+            name="price_drop_notification_opt_out"
+            nullable="false"
+            default="false"
+            comment="Price Drop Notification Opt-out"/>
+    </table>
 </schema>

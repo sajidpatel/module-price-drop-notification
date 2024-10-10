@@ -7,20 +7,19 @@ use Magento\Framework\MessageQueue\PublisherInterface;
 use SajidPatel\PriceDropNotification\Api\Data\PriceDropNotificationMessageInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Publishes price drop notification messages to the queue
- */
 class PriceDropNotificationPublisher
 {
+    protected const TOPIC_NAME = 'sajidpatel.price_drop_notification';
+
     /**
      * @var PublisherInterface
      */
-    private $publisher;
+    protected $publisher;
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    protected $logger;
 
     /**
      * @param PublisherInterface $publisher
@@ -43,7 +42,7 @@ class PriceDropNotificationPublisher
     public function publish(PriceDropNotificationMessageInterface $message): void
     {
         try {
-            $this->publisher->publish('sajidpatel.price_drop_notification', $message);
+            $this->publisher->publish(self::TOPIC_NAME, $message);
             $this->logger->info('Price drop notification published for product: ' . $message->getProductId());
         } catch (\Exception $e) {
             $this->logger->error('Failed to publish price drop notification: ' . $e->getMessage(), [

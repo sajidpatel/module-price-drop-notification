@@ -13,17 +13,17 @@ class Index implements HttpGetActionInterface
     /**
      * @var PageFactory
      */
-    private $resultPageFactory;
+    protected $resultPageFactory;
 
     /**
      * @var Session
      */
-    private $customerSession;
+    protected $customerSession;
 
     /**
      * @var RedirectFactory
      */
-    private $resultRedirectFactory;
+    protected $resultRedirectFactory;
 
     /**
      * @param PageFactory $resultPageFactory

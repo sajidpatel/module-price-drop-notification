@@ -15,27 +15,27 @@ class Delete implements HttpPostActionInterface
     /**
      * @var JsonFactory
      */
-    private $resultJsonFactory;
+    protected $resultJsonFactory;
 
     /**
      * @var Session
      */
-    private $customerSession;
+    protected $customerSession;
 
     /**
      * @var NotificationFactory
      */
-    private $notificationFactory;
+    protected $notificationFactory;
 
     /**
      * @var NotificationResource
      */
-    private $notificationResource;
+    protected $notificationResource;
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    protected $logger;
 
     /**
      * @param JsonFactory $resultJsonFactory

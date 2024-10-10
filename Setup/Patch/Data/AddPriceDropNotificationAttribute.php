@@ -13,12 +13,12 @@ class AddPriceDropNotificationAttribute implements DataPatchInterface
     /**
      * @var ModuleDataSetupInterface
      */
-    private $moduleDataSetup;
+    protected $moduleDataSetup;
 
     /**
      * @var EavSetupFactory
      */
-    private $eavSetupFactory;
+    protected $eavSetupFactory;
 
     /**
      * @param ModuleDataSetupInterface $moduleDataSetup
