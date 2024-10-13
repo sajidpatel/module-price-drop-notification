@@ -52,36 +52,6 @@ class PriceChange implements ObserverInterface
     }
 
     /**
-     * Execute observer
-     *
-     * @param Observer $observer
-     * @return void
-     */
-    public function execute(Observer $observer): void
-    {
-        if (!$this->isEnabled()) {
-            return;
-        }
-
-        try {
-            $product = $observer->getEvent()->getProduct();
-
-            if (!$this->isEnabledForProduct($product)) {
-                return;
-            }
-
-            $oldPrice = $product->getOrigData('price');
-            $newPrice = $product->getData('price');
-
-            if ($newPrice < $oldPrice) {
-                $this->processNotifications($product, $oldPrice, $newPrice);
-            }
-        } catch (\Exception $e) {
-            $this->logger->error('Error processing price change: ' . $e->getMessage(), ['exception' => $e]);
-        }
-    }
-
-    /**
      * Check if the price drop notification feature is enabled for a specific product
      *
      * @param \Magento\Catalog\Model\Product $product

@@ -7,7 +7,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Customer\Model\Session;
 use SajidPatel\PriceDropNotification\Model\NotificationFactory;
-use SajidPatel\PriceDropNotification\Model\ResourceModel\Notification as NotificationResource;
+use SajidPatel\PriceDropNotification\Model\Notification as NotificationResource;
 use Psr\Log\LoggerInterface;
 
 class Delete implements HttpPostActionInterface
@@ -40,7 +40,7 @@ class Delete implements HttpPostActionInterface
     /**
      * @param JsonFactory $resultJsonFactory
      * @param Session $customerSession
-     * @param NotificationFactory $notificationFactory
+     * @param NotificationFactory $NotificationFactory
      * @param NotificationResource $notificationResource
      * @param LoggerInterface $logger
      */

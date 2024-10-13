@@ -7,9 +7,6 @@ use Magento\Framework\Controller\Result\JsonFactory;
 use SajidPatel\PriceDropNotification\Model\NotificationFactory;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\Controller\Result\JsonFactory;
-use SajidPatel\PriceDropNotification\Model\NotificationFactory;
-use Magento\Customer\Model\Session;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
 class Subscribe extends Action

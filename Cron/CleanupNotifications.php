@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace SajidPatel\PriceDropNotification\Cron;
 
 use SajidPatel\PriceDropNotification\Model\ResourceModel\Notification\CollectionFactory;
-use SajidPatel\PriceDropNotification\Model\ResourceModel\Notification as NotificationResource;
+use SajidPatel\PriceDropNotification\Model\Notification as NotificationResource;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Psr\Log\LoggerInterface;

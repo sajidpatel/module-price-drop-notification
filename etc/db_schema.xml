@@ -1,12 +1,15 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table name="sajidpatel_price_drop_notification" resource="default" engine="innodb" comment="Price Drop Notification Table">
+    <table name="price_drop_notification" resource="default" engine="innodb" comment="Price Drop Notification Table">
         <column xsi:type="int" name="notification_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Notification ID"/>
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" comment="Product ID"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" comment="Customer ID"/>
         <column xsi:type="varchar" name="email" nullable="false" length="255" comment="Customer Email"/>
+        <column xsi:type="decimal" name="initial_price" scale="4" precision="12" unsigned="false" nullable="false" comment="Initial Product Price"/>
+        <column xsi:type="decimal" name="threshold_percentage" scale="2" precision="5" unsigned="false" nullable="true" comment="Threshold Percentage for Notification"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true" comment="Last updated date" />
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="notification_id"/>
         </constraint>
@@ -19,7 +22,7 @@
         <index referenceId="SAJIDPATEL_PRICE_DROP_NOTIFICATION_PRODUCT_ID" indexType="btree">
             <column name="product_id"/>
         </index>
-        <index referenceId="SAJIDPATEL_PRICE_DROP_NOTIFICATION_CUSTOMER_ID" indexType="btree">
+        <index referenceId="PRICE_DROP_NOTIFICATION_CUSTOMER_ID" indexType="btree">
             <column name="customer_id"/>
         </index>
     </table>

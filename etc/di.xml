@@ -1,5 +1,26 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="SajidPatel\PriceDropNotification\Api\NotificationRepositoryInterface"
+        type="SajidPatel\PriceDropNotification\Model\NotificationRepository"/>
+    <preference for="SajidPatel\PriceDropNotification\Api\Data\NotificationInterface"
+        type="SajidPatel\PriceDropNotification\Model\Notification"/>
+    <preference for="SajidPatel\PriceDropNotification\Api\Data\NotificationSearchResultsInterface"
+        type="SajidPatel\PriceDropNotification\Model\NotificationSearchResults" />
+
+
+    <type name="SajidPatel\PriceDropNotification\Model\NotificationRepository">
+        <arguments>
+            <argument name="resource"
+                xsi:type="object">SajidPatel\PriceDropNotification\Model\ResourceModel\Notification</argument>
+            <argument name="notificationFactory"
+                xsi:type="object">SajidPatel\PriceDropNotification\Model\NotificationFactory</argument>
+            <argument name="notificationCollectionFactory"
+                xsi:type="object">SajidPatel\PriceDropNotification\Model\ResourceModel\Notification\CollectionFactory</argument>
+            <argument name="searchResultsFactory"
+                xsi:type="object">Magento\Framework\Api\SearchResultsFactory</argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\FieldEntityAttributesPool">
         <arguments>
             <argument name="attributesInstances" xsi:type="array">
@@ -32,6 +53,18 @@
     <type name="Magento\Customer\Model\Customer">
         <plugin name="sajidpatel_pricedropnotification_customer_plugin"
                 type="SajidPatel\PriceDropNotification\Plugin\Model\CustomerPlugin"/>
+    </type>
+
+    <type name="Magento\Framework\GraphQl\Query\ResolverInterface">
+        <arguments>
+            <argument name="priceDropNotifications" xsi:type="object">SajidPatel\PriceDropNotification\Model\Resolver\PriceDropNotifications</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\GraphQl\Query\ResolverInterface">
+        <arguments>
+            <argument name="enablePriceDropNotification" xsi:type="object">SajidPatel\PriceDropNotification\Model\Resolver\EnablePriceDropNotification</argument>
+        </arguments>
     </type>
 
     <!-- [TODO: Remove before deployin] -->

@@ -81,7 +81,7 @@ class PriceDropButton extends Template
     }
 
     /**
-     * Get subscription URL
+     * Get notification URL
      *
      * @return string
      */

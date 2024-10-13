@@ -12,7 +12,7 @@ interface PriceDropNotificationMessageInterface
      * @param int $productId
      * @return $this
      */
-    public function setProductId($productId);
+    public function setProductId(int $productId);
 
     /**
      * @return string
@@ -23,7 +23,7 @@ interface PriceDropNotificationMessageInterface
      * @param string $customerEmail
      * @return $this
      */
-    public function setCustomerEmail($customerEmail);
+    public function setCustomerEmail(string $customerEmail);
 
     /**
      * @return float
@@ -34,7 +34,7 @@ interface PriceDropNotificationMessageInterface
      * @param float $oldPrice
      * @return $this
      */
-    public function setOldPrice($oldPrice);
+    public function setOldPrice(float $oldPrice);
 
     /**
      * @return float
@@ -45,5 +45,5 @@ interface PriceDropNotificationMessageInterface
      * @param float $newPrice
      * @return $this
      */
-    public function setNewPrice($newPrice);
+    public function setNewPrice(float $newPrice);
 }

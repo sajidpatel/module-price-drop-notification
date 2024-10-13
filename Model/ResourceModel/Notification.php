@@ -8,6 +8,6 @@ class Notification extends AbstractDb
 {
     protected function _construct()
     {
-        $this->_init('sajidpatel_price_drop_notification', 'notification_id');
+        $this->_init('price_drop_notification', 'notification_id');
     }
 }

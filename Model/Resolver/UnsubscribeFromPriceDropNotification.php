@@ -10,7 +10,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use SajidPatel\PriceDropNotification\Model\NotificationFactory;
-use SajidPatel\PriceDropNotification\Model\ResourceModel\Notification as NotificationResource;
+use SajidPatel\PriceDropNotification\Model\Notification as NotificationResource;
 use Magento\Customer\Model\Session;
 
 class UnsubscribeFromPriceDropNotification implements ResolverInterface
