@@ -88,13 +88,35 @@ class NotificationRepository implements NotificationRepositoryInterface
         return $collection->getItems();
     }
 
+ /**
+     * Subscribe customer to price drop notification
+     *
+     * @param string $productSku
+     * @param string $email
+     * @param float|null $threshold
+     * @return NotificationInterface
+     * @throws LocalizedException
+     */
     public function subscribe($productSku, $email, $threshold = null)
     {
+        // Check if a notification already exists for this email and product SKU
+        $existingNotification = $this->collectionFactory->create()
+            ->addFieldToFilter('product_sku', $productSku)
+            ->addFieldToFilter('email', $email)
+            ->getFirstItem();
+
+        if ($existingNotification->getId()) {
+            throw new LocalizedException(
+                __('A notification already exists for this email and product SKU.')
+            );
+        }
+
+        /** @var NotificationInterface $notification */
         $notification = $this->notificationFactory->create();
-        $notification->setProductSku($productSku)
-            ->setEmail($email)
-            ->setThreshold($threshold)
-            ->setCreatedAt(new \DateTime());
+        $notification->setProductSku($productSku);
+        $notification->setEmail($email);
+        $notification->setThreshold($threshold);
+
         return $this->save($notification);
     }
 
@@ -109,4 +131,5 @@ class NotificationRepository implements NotificationRepositoryInterface
         }
         return false;
     }
+
 }

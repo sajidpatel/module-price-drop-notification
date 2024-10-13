@@ -43,10 +43,10 @@ class PriceDropNotificationPublisher
     {
         try {
             $this->publisher->publish(self::TOPIC_NAME, $message);
-            $this->logger->info('Price drop notification published for product: ' . $message->getProductId());
+            $this->logger->info('Price drop notification published for product: ' . $message->getProductSku());
         } catch (\Exception $e) {
             $this->logger->error('Failed to publish price drop notification: ' . $e->getMessage(), [
-                'product_id' => $message->getProductId(),
+                'product_sku' => $message->getProductSku(),
                 'customer_email' => $message->getCustomerEmail(),
                 'exception' => $e
             ]);

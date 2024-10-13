@@ -92,18 +92,18 @@ class PriceDropNotificationHandler
             $transport->sendMessage();
 
             $this->logger->info('Price drop notification email sent', [
-                'product_id' => $message->getProductId(),
+                'product_sku' => $message->getProductSku(),
                 'customer_email' => $message->getCustomerEmail()
             ]);
         } catch (MailException $e) {
             $this->logger->error('Failed to send price drop notification email: ' . $e->getMessage(), [
-                'product_id' => $message->getProductId(),
+                'product_sku' => $message->getProductSku(),
                 'customer_email' => $message->getCustomerEmail(),
                 'exception' => $e
             ]);
         } catch (\Exception $e) {
             $this->logger->critical('Unexpected error processing price drop notification: ' . $e->getMessage(), [
-                'product_id' => $message->getProductId(),
+                'product_sku' => $message->getProductSku(),
                 'customer_email' => $message->getCustomerEmail(),
                 'exception' => $e
             ]);

@@ -68,13 +68,13 @@ class Subscribe extends Action
             return $result->setData(['success' => false, 'message' => __('Please login to subscribe to price drop notifications.')]);
         }
 
-        $productId = $this->getRequest()->getParam('product_id');
+        $productSku = $this->getRequest()->getParam('product_sku');
         $customerId = $this->customerSession->getCustomerId();
         $customerEmail = $this->customerSession->getCustomer()->getEmail();
 
         try {
             $notification = $this->notificationFactory->create();
-            $notification->setProductId($productId)
+            $notification->setProductSku($productSku)
                 ->setCustomerId($customerId)
                 ->setEmail($customerEmail)
                 ->save();

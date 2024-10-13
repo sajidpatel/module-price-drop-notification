@@ -8,7 +8,7 @@ define(['jquery', 'Magento_Ui/js/modal/alert'], function ($, alert) {
                 type: 'POST',
                 dataType: 'json',
                 data: {
-                    product_id: config.productId
+                    product_sku: config.productSku
                 },
                 success: function (response) {
                     alert({

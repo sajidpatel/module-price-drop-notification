@@ -3,9 +3,9 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="price_drop_notification" resource="default" engine="innodb" comment="Price Drop Notification Table">
         <column xsi:type="int" name="notification_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Notification ID"/>
-        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" comment="Product ID"/>
+        <column xsi:type="varchar" name="product_sku" nullable="false" length="255" comment="Product SKU"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" comment="Customer ID"/>
-        <column xsi:type="varchar" name="email" nullable="false" length="255" comment="Customer Email"/>
+        <column xsi:type="varchar" name="email" nullable="true" length="255" comment="Customer Email"/>
         <column xsi:type="decimal" name="initial_price" scale="4" precision="12" unsigned="false" nullable="false" comment="Initial Product Price"/>
         <column xsi:type="decimal" name="threshold_percentage" scale="2" precision="5" unsigned="false" nullable="true" comment="Threshold Percentage for Notification"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
@@ -13,14 +13,11 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="notification_id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="SAJIDPATEL_PRICE_DROP_NOTIF_PRD_ID_CAT_PRD_ENTT_ENTT_ID"
-                    table="sajidpatel_price_drop_notification" column="product_id"
-                    referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" referenceId="SAJIDPATEL_PRICE_DROP_NOTIF_CSTR_ID_CSTR_ENTT_ENTT_ID"
-                    table="sajidpatel_price_drop_notification" column="customer_id"
+        <constraint xsi:type="foreign" referenceId="PRICE_DROP_NOTIF_CSTR_ID_CSTR_ENTT_ENTT_ID"
+                    table="price_drop_notification" column="customer_id"
                     referenceTable="customer_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index referenceId="SAJIDPATEL_PRICE_DROP_NOTIFICATION_PRODUCT_ID" indexType="btree">
-            <column name="product_id"/>
+        <index referenceId="PRICE_DROP_NOTIFICATION_PRODUCT_SKU" indexType="btree">
+            <column name="product_sku"/>
         </index>
         <index referenceId="PRICE_DROP_NOTIFICATION_CUSTOMER_ID" indexType="btree">
             <column name="customer_id"/>

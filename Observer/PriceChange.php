@@ -37,7 +37,7 @@ class PriceChange implements ObserverInterface
 
         if ($newPrice < $oldPrice) {
             $notifications = $this->notificationCollectionFactory->create()
-                ->addFieldToFilter('product_id', $product->getId());
+                ->addFieldToFilter('product_sku', $product->getSku());
 
             foreach ($notifications as $notification) {
                 $message = new PriceDropNotificationMessage();
