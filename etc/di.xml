@@ -59,15 +59,4 @@
             <argument name="priceDropNotifications" xsi:type="object">SajidPatel\PriceDropNotification\Model\Resolver\PriceDropNotifications</argument>
         </arguments>
     </type>
-
-    <type name="Magento\Framework\GraphQl\Query\ResolverInterface">
-        <arguments>
-            <argument name="enablePriceDropNotification" xsi:type="object">SajidPatel\PriceDropNotification\Model\Resolver\EnablePriceDropNotification</argument>
-        </arguments>
-    </type>
-
-    <!-- [TODO: Remove before deployin] -->
-    <type name="Magento\Framework\App\Response\Http">
-        <plugin name="cors_headers" type="SajidPatel\PriceDropNotification\Plugin\CorsHeaders"/>
-    </type>
 </config>
