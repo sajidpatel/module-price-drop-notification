@@ -1,10 +1,11 @@
 type Mutation {
   subscribeToPriceDrop(input: PriceDropNotificationInput!): PriceDropNotificationOutput @resolver(class: "SajidPatel\\PriceDropNotification\\Model\\Resolver\\SubscribeToPriceDrop")
   unsubscribeFromPriceDrop(input: UnsubscribeInput!): UnsubscribeOutput @resolver(class: "SajidPatel\\PriceDropNotification\\Model\\Resolver\\UnsubscribeFromPriceDrop")
+  togglePriceDropNotificationOptOut(opt_out: Boolean!): PriceDropNotificationOptOutOutput @resolver(class: "SajidPatel\\PriceDropNotification\\Model\\Resolver\\TogglePriceDropNotificationOptOut")
 }
 
 type Query {
-  priceDropNotifications: [PriceDropNotification] @resolver(class: "SajidPatel\\PriceDropNotification\\Model\\Resolver\\PriceDropNotifications")
+  priceDropNotifications(email: String!): [PriceDropNotification] @resolver(class: "SajidPatel\\PriceDropNotification\\Model\\Resolver\\PriceDropNotifications")
 }
 
 input PriceDropNotificationInput {
@@ -24,6 +25,11 @@ type PriceDropNotificationOutput {
   email: String!
   threshold: Float
   created_at: String
+}
+
+type PriceDropNotificationOptOutOutput {
+    customer_id: Int!
+    opted_out: Boolean!
 }
 
 type PriceDropNotification {

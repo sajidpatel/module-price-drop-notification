@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AsynchronousOperations\Model;
+namespace SajidPatel\PriceDropNotification\Model;
 
 use SajidPatel\PriceDropNotification\Api\Data\NotificationSearchResultsInterface;
 use Magento\Framework\Api\SearchResults;
