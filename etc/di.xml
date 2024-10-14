@@ -9,31 +9,16 @@
         type="SajidPatel\PriceDropNotification\Model\NotificationSearchResults" />
     <type name="SajidPatel\PriceDropNotification\Api\NotificationRepositoryInterface">
         <arguments>
-            <argument name="resource" xsi:type="object">SajidPatel\PriceDropNotification\Model\ResourceModel\Notification</argument>
-            <argument name="notificationFactory" xsi:type="object">SajidPatel\PriceDropNotification\Model\NotificationFactory</argument>
-            <argument name="collectionFactory" xsi:type="object">SajidPatel\PriceDropNotification\Model\ResourceModel\Notification\CollectionFactory</argument>
-            <argument name="searchResultsFactory" xsi:type="object">SajidPatel\PriceDropNotification\Api\Data\NotificationSearchResultsInterfaceFactory</argument>
-        </arguments>
-    </type>
-    <!-- <preference for="SajidPatel\PriceDropNotification\Api\NotificationRepositoryInterface"
-        type="SajidPatel\PriceDropNotification\Model\NotificationRepository"/>
-    <preference for="SajidPatel\PriceDropNotification\Api\Data\NotificationInterface"
-        type="SajidPatel\PriceDropNotification\Model\Notification"/>
-    <preference for="SajidPatel\PriceDropNotification\Api\Data\NotificationSearchResultsInterface"
-        type="SajidPatel\PriceDropNotification\Model\NotificationSearchResults" /> -->
-
-    <!-- <type name="SajidPatel\PriceDropNotification\Model\NotificationRepository">
-        <arguments>
             <argument name="resource"
                 xsi:type="object">SajidPatel\PriceDropNotification\Model\ResourceModel\Notification</argument>
             <argument name="notificationFactory"
                 xsi:type="object">SajidPatel\PriceDropNotification\Model\NotificationFactory</argument>
-            <argument name="notificationCollectionFactory"
+            <argument name="collectionFactory"
                 xsi:type="object">SajidPatel\PriceDropNotification\Model\ResourceModel\Notification\CollectionFactory</argument>
             <argument name="searchResultsFactory"
-                xsi:type="object">Magento\Framework\Api\SearchResultsFactory</argument>
+                xsi:type="object">SajidPatel\PriceDropNotification\Api\Data\NotificationSearchResultsInterfaceFactory</argument>
         </arguments>
-    </type> -->
+    </type>
 
     <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\FieldEntityAttributesPool">
         <arguments>

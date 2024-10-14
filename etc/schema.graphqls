@@ -5,7 +5,7 @@ type Mutation {
 }
 
 type Query {
-  priceDropNotifications(email: String!): [PriceDropNotification] @resolver(class: "SajidPatel\\PriceDropNotification\\Model\\Resolver\\PriceDropNotifications")
+  priceDropNotifications(email: String): [PriceDropNotification] @resolver(class: "SajidPatel\\PriceDropNotification\\Model\\Resolver\\PriceDropNotifications")
 }
 
 input PriceDropNotificationInput {
