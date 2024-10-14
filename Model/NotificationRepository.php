@@ -88,22 +88,28 @@ class NotificationRepository implements NotificationRepositoryInterface
         return $collection->getItems();
     }
 
- /**
+    /**
      * Subscribe customer to price drop notification
      *
      * @param string $productSku
      * @param string $email
      * @param float|null $threshold
+     * @param int|null $customerId
      * @return NotificationInterface
      * @throws LocalizedException
      */
-    public function subscribe($productSku, $email, $threshold = null)
+    public function subscribe($productSku, $email, $threshold = null, $customerId = null)
     {
         // Check if a notification already exists for this email and product SKU
-        $existingNotification = $this->collectionFactory->create()
+        $existingNotification = $this->notificationCollectionFactory->create()
             ->addFieldToFilter('product_sku', $productSku)
-            ->addFieldToFilter('email', $email)
-            ->getFirstItem();
+            ->addFieldToFilter('email', $email);
+
+        if ($customerId) {
+            $existingNotification->addFieldToFilter('customer_id', $customerId);
+        }
+
+        $existingNotification = $existingNotification->getFirstItem();
 
         if ($existingNotification->getId()) {
             throw new LocalizedException(
@@ -116,20 +122,33 @@ class NotificationRepository implements NotificationRepositoryInterface
         $notification->setProductSku($productSku);
         $notification->setEmail($email);
         $notification->setThreshold($threshold);
+        if ($customerId) {
+            $notification->setCustomerId($customerId);
+        }
 
         return $this->save($notification);
     }
 
-    public function unsubscribe($productSku, $email)
+    /**
+     * Unsubscribe customer from price drop notification
+     *
+     * @param string $productSku
+     * @param string $email
+     * @return bool
+     * @throws LocalizedException
+     */
+    public function unsubscribe($productSku, $email, $customerId = null)
     {
-        $collection = $this->notificationCollectionFactory->create();
+        $collection = $this->collectionFactory->create();
         $collection->addFieldToFilter('product_sku', $productSku)
             ->addFieldToFilter('email', $email);
+        if ($customerId) {
+            $collection->addFieldToFilter('customer_id', $customerId);
+        }
         $notification = $collection->getFirstItem();
         if ($notification->getId()) {
             return $this->delete($notification);
         }
         return false;
     }
-
 }

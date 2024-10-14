@@ -1,140 +1,77 @@
 <?php
-
-declare(strict_types=1);
-
 namespace SajidPatel\PriceDropNotification\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
-use SajidPatel\PriceDropNotification\Model\ResourceModel\Notification\CollectionFactory;
-use Magento\Customer\Model\Session;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
+use SajidPatel\PriceDropNotification\Api\NotificationRepositoryInterface;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
-/**
- * Resolver for customer price drop notifications
- */
-class CustomerPriceDropNotifications implements ResolverInterface
+class SubscribeToPriceDrop implements ResolverInterface
 {
-    /**
-     * @var CollectionFactory
-     */
-    protected $notificationCollectionFactory;
+    private $productRepository;
+    private $notificationRepository;
+    private $customerSession;
+    private $customerRepository;
 
-    /**
-     * @var Session
-     */
-    protected $customerSession;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    protected $productRepository;
-
-    /**
-     * @param CollectionFactory $notificationCollectionFactory
-     * @param Session $customerSession
-     * @param ProductRepositoryInterface $productRepository
-     */
     public function __construct(
-        CollectionFactory $notificationCollectionFactory,
-        Session $customerSession,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        NotificationRepositoryInterface $notificationRepository,
+        CustomerSession $customerSession,
+        CustomerRepositoryInterface $customerRepository
     ) {
-        $this->notificationCollectionFactory = $notificationCollectionFactory;
-        $this->customerSession = $customerSession;
         $this->productRepository = $productRepository;
+        $this->notificationRepository = $notificationRepository;
+        $this->customerSession = $customerSession;
+        $this->customerRepository = $customerRepository;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function resolve(
-        Field $field,
-        $context,
-        ResolveInfo $info,
-        array $value = null,
-        array $args = null
-    ) {
-        if (!$this->customerSession->isLoggedIn()) {
-            throw new GraphQlAuthorizationException(
-                __('The current customer isn\'t authorized.')
-            );
+    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    {
+        if (!isset($args['input']) || !isset($args['input']['product_sku']) || !isset($args['input']['threshold'])) {
+            throw new GraphQlInputException(__('Invalid input. Product SKU and threshold are required.'));
         }
 
-        $collection = $this->notificationCollectionFactory->create();
-        $collection->addFieldToFilter('customer_id', $this->customerSession->getCustomerId());
+        $input = $args['input'];
+        $productSku = $input['product_sku'];
+        $threshold = $input['threshold'];
+        $email = $input['email'] ?? null;
 
-        $notifications = [];
-        foreach ($collection as $notification) {
-            $product = $this->productRepository->getById($notification->getProductId());
-            $notifications[] = $this->formatNotification($notification, $product);
+        try {
+            // Verify that the product exists
+            $this->productRepository->get($productSku);
+
+            // Check if the customer is logged in
+            if (!$this->customerSession->isLoggedIn()) {
+                // Guest user
+                if (!$email) {
+                    throw new GraphQlInputException(__('Email is required for guest users.'));
+                }
+            } else {
+                // Logged-in customer
+                $customerId = $this->customerSession->getCustomerId();
+                $customer = $this->customerRepository->getById($customerId);
+                $email = $customer->getEmail();
+            }
+
+            // Create the notification
+            $notification = $this->notificationRepository->subscribe($productSku, $email, $threshold);
+
+            return [
+                'notification_id' => $notification->getId(),
+                'product_sku' => $notification->getProductSku(),
+                'email' => $notification->getEmail(),
+                'threshold' => $notification->getThreshold(),
+                'created_at' => $notification->getCreatedAt()
+            ];
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            throw new GraphQlInputException(__('The product with SKU "%1" does not exist.', $productSku));
+        } catch (\Exception $e) {
+            throw new GraphQlInputException(__($e->getMessage()));
         }
-
-        return $notifications;
-    }
-
-    /**
-     * Format notification data
-     *
-     * @param \SajidPatel\PriceDropNotification\Model\Notification $notification
-     * @param Product $product
-     * @return array
-     */
-    private function formatNotification($notification, Product $product): array
-    {
-        return [
-            'id' => $notification->getId(),
-            'product' => [
-                'id' => $product->getId(),
-                'name' => $product->getName(),
-                'sku' => $product->getSku(),
-                'price_range' => $this->getPriceRange($product),
-                'price_drop_notification_enabled' =>
-                    (bool)$product->getData('enable_price_drop_notification')
-            ],
-            'created_at' => $notification->getCreatedAt()
-        ];
-    }
-
-    /**
-     * Get price range for product
-     *
-     * @param Product $product
-     * @return array
-     */
-    private function getPriceRange(Product $product): array
-    {
-        $price = $product->getPriceInfo()->getPrice('final_price');
-        $priceValue = $price->getAmount()->getValue();
-        $currencyCode = $price->getAmount()->getCurrency()->getCurrencyCode();
-
-        return [
-            'minimum_price' => $this->formatPrice($priceValue, $currencyCode),
-            'maximum_price' => $this->formatPrice($priceValue, $currencyCode)
-        ];
-    }
-
-    /**
-     * Format price data
-     *
-     * @param float $value
-     * @param string $currencyCode
-     * @return array
-     */
-    private function formatPrice(float $value, string $currencyCode): array
-    {
-        return [
-            'regular_price' => [
-                'value' => $value,
-                'currency' => $currencyCode
-            ],
-            'final_price' => [
-                'value' => $value,
-                'currency' => $currencyCode
-            ]
-        ];
     }
 }
