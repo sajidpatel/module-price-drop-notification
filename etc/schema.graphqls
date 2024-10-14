@@ -5,7 +5,13 @@ type Mutation {
 }
 
 type Query {
+  customerPriceDropNotificationOptOut: Boolean! @resolver(class: "SajidPatel\\PriceDropNotification\\Model\\Resolver\\GetCustomerPriceDropNotificationOptOut") @doc(description: "Get the price drop notification opt-out status for the current customer.")
   priceDropNotifications(email: String): [PriceDropNotification] @resolver(class: "SajidPatel\\PriceDropNotification\\Model\\Resolver\\PriceDropNotifications")
+}
+
+
+extend type Query {
+  customerPriceDropNotificationOptOut: Boolean! @resolver(class: "SajidPatel\\PriceDropNotification\\Model\\Resolver\\GetCustomerPriceDropNotificationOptOut") @doc(description: "Get the price drop notification opt-out status for the current customer. Returns null if the customer is not logged in.")
 }
 
 input PriceDropNotificationInput {
@@ -47,4 +53,8 @@ type UnsubscribeOutput {
 
 interface ProductInterface {
     enable_price_drop_notification: Boolean @doc(description: "Toggle to enable / disable price drop notification.")
+}
+
+extend type Customer {
+    price_drop_notification_opt_out: Boolean! @resolver(class: "SajidPatel\\PriceDropNotification\\Model\\Resolver\\GetCustomerPriceDropNotificationOptOut") @doc(description: "Indicates whether the customer has opted out of price drop notifications.")
 }
