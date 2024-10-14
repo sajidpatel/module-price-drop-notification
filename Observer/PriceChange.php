@@ -17,7 +17,6 @@ use Magento\Framework\Exception\LocalizedException;
 class PriceChange implements ObserverInterface
 {
     private const XML_PATH_ENABLED = 'price_drop_notification/general/enabled';
-    private const XML_PATH_MINIMUM_PRICE_DROP_PERCENTAGE = 'price_drop_notification/general/minimum_price_drop_percentage';
 
     private $notificationCollectionFactory;
     private $scopeConfig;
@@ -83,7 +82,13 @@ class PriceChange implements ObserverInterface
 
         foreach ($notifications as $notification) {
             try {
-                $message = $this->createNotificationMessage($product, $notification, $oldPrice, $newPrice, $priceDropPercentage);
+                $message = $this->createNotificationMessage(
+                    $product,
+                    $notification,
+                    $oldPrice,
+                    $newPrice,
+                    $priceDropPercentage
+                );
                 $this->publisher->publish($message);
             } catch (\Exception $e) {
                 $this->logger->error(

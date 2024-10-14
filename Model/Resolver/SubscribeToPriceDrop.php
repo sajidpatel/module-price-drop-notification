@@ -1,4 +1,5 @@
 <?php
+
 namespace SajidPatel\PriceDropNotification\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -8,67 +9,58 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use SajidPatel\PriceDropNotification\Api\NotificationRepositoryInterface;
-use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
-use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Customer\Model\Session as CustomerSession;
 
+/**
+ * Resolver for subscribing to price drop notifications.
+ */
 class SubscribeToPriceDrop implements ResolverInterface
 {
-    private $productRepository;
-    private $notificationRepository;
-    private $getCustomer;
-    private $customerTokenService;
+    private ProductRepositoryInterface $productRepository;
+    private NotificationRepositoryInterface $notificationRepository;
+    private CustomerSession $customerSession;
 
+    /**
+     * @param ProductRepositoryInterface $productRepository
+     * @param NotificationRepositoryInterface $notificationRepository
+     * @param CustomerSession $customerSession
+     */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         NotificationRepositoryInterface $notificationRepository,
-        GetCustomer $getCustomer,
-        CustomerTokenServiceInterface $customerTokenService
+        CustomerSession $customerSession
     ) {
         $this->productRepository = $productRepository;
         $this->notificationRepository = $notificationRepository;
-        $this->getCustomer = $getCustomer;
-        $this->customerTokenService = $customerTokenService;
+        $this->customerSession = $customerSession;
     }
 
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
-    {
-        if (!isset($args['input']) || !isset($args['input']['product_sku']) || !isset($args['input']['threshold'])) {
-            throw new GraphQlInputException(__('Invalid input. Product SKU and threshold are required.'));
-        }
+    /**
+     * @inheritdoc
+     */
+    public function resolve(
+        Field $field,
+        $context,
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ) {
+        $this->validateInput($args);
 
         $input = $args['input'];
         $productSku = $input['product_sku'];
         $threshold = $input['threshold'];
-        $email = $input['email'] ?? null;
-        $isCustomer = $context->getExtensionAttributes()->getIsCustomer();
+        $providedEmail = $input['email'] ?? null;
 
         try {
-            // Verify that the product exists
-            $this->productRepository->get($productSku);
+            $this->validateProduct($productSku);
+            $email = $this->getVerifiedEmail($providedEmail);
 
-            // Check for bearer token
-            if ($isCustomer) {
-                try {
-                    // Validate token and get customer ID
-                    $customerId = $this->customerTokenService->getCustomerIdByToken($token);
-                    if ($customerId) {
-                        $customer = $this->getCustomer->execute($context);
-                        $email = $customer->getEmail();
-                    } else {
-                        throw new GraphQlAuthorizationException(__('Invalid access token'));
-                    }
-                } catch (\Exception $e) {
-                    throw new GraphQlAuthorizationException(__('Invalid access token'));
-                }
-            } else {
-                // Guest user
-                if (!$email) {
-                    throw new GraphQlInputException(__('Email is required for guest users.'));
-                }
-            }
-
-            // Create the notification
-            $notification = $this->notificationRepository->subscribe($productSku, $email, $threshold);
+            $notification = $this->notificationRepository->subscribe(
+                $productSku,
+                $email,
+                $threshold
+            );
 
             return [
                 'notification_id' => $notification->getId(),
@@ -77,10 +69,73 @@ class SubscribeToPriceDrop implements ResolverInterface
                 'threshold' => $notification->getThreshold(),
                 'created_at' => $notification->getCreatedAt()
             ];
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-            throw new GraphQlInputException(__('The product with SKU "%1" does not exist.', $productSku));
         } catch (\Exception $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
+    }
+
+    /**
+     * Validate the input arguments.
+     *
+     * @param array|null $args
+     * @throws GraphQlInputException
+     */
+    private function validateInput(?array $args): void
+    {
+        if (!isset($args['input'])
+            || !isset($args['input']['product_sku'])
+            || !isset($args['input']['threshold'])
+        ) {
+            throw new GraphQlInputException(
+                __('Invalid input. Product SKU and threshold are required.')
+            );
+        }
+    }
+
+    /**
+     * Validate that the product exists.
+     *
+     * @param string $productSku
+     * @throws GraphQlInputException
+     */
+    private function validateProduct(string $productSku): void
+    {
+        try {
+            $this->productRepository->get($productSku);
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            throw new GraphQlInputException(
+                __('The product with SKU "%1" does not exist.', $productSku)
+            );
+        }
+    }
+
+    /**
+     * Get and verify the email for the notification.
+     *
+     * @param string|null $providedEmail
+     * @return string
+     * @throws GraphQlInputException
+     * @throws GraphQlAuthorizationException
+     */
+    private function getVerifiedEmail(?string $providedEmail): string
+    {
+        $customerId = $this->customerSession->getCustomerId();
+        if ($customerId) {
+            $customerEmail = $this->customerSession->getCustomer()->getEmail();
+            if ($providedEmail && $providedEmail !== $customerEmail) {
+                throw new GraphQlAuthorizationException(
+                    __('The provided email does not match the customer\'s email on file.')
+                );
+            }
+            return $customerEmail;
+        }
+
+        if (!$providedEmail) {
+            throw new GraphQlInputException(
+                __('Email is required for guest users.')
+            );
+        }
+
+        return $providedEmail;
     }
 }
