@@ -139,7 +139,7 @@ class NotificationRepository implements NotificationRepositoryInterface
      */
     public function unsubscribe($productSku, $email, $customerId = null)
     {
-        $collection = $this->collectionFactory->create();
+        $collection = $this->notificationCollectionFactory->create();
         $collection->addFieldToFilter('product_sku', $productSku)
             ->addFieldToFilter('email', $email);
         if ($customerId) {
